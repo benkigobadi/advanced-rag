@@ -1,0 +1,159 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 670" width="1200" height="670" font-family="-apple-system, Segoe UI, Helvetica, Arial, sans-serif">
+  <title>Context engineering architecture</title>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#374151"/>
+    </marker>
+    <style>
+      .t { font-size: 13px; font-weight: 700; fill: #111827; }
+      .d { font-size: 11px; fill: #374151; }
+      .band { font-size: 12px; font-weight: 700; letter-spacing: 1px; fill: #6b7280; }
+      .lbl { font-size: 11px; font-style: italic; fill: #4b5563; }
+      .off { fill: #f3f4f6; stroke: #6b7280; stroke-width: 1.2; }
+      .db  { fill: #fff4e5; stroke: #d97706; stroke-width: 1.5; }
+      .on  { fill: #eef4ff; stroke: #2b5fd9; stroke-width: 1.2; }
+      .gr  { fill: #e0e9ff; stroke: #1e40af; stroke-width: 1.5; }
+      .me  { fill: #ecfdf5; stroke: #059669; stroke-width: 1.2; }
+      .ln  { stroke: #374151; stroke-width: 1.4; fill: none; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="670" fill="#ffffff"/>
+  <text x="600" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="#111827">Context Engineering Architecture</text>
+
+  <!-- OFFLINE -->
+  <text class="band" x="30" y="66">OFFLINE · INGEST &amp; INDEX</text>
+
+  <rect class="off" x="30" y="80" width="140" height="110" rx="8"/>
+  <text class="t" x="100" y="112" text-anchor="middle">Documents</text>
+  <text class="d" x="100" y="134" text-anchor="middle">PDFs, policies,</text>
+  <text class="d" x="100" y="150" text-anchor="middle">records</text>
+
+  <rect class="off" x="196" y="80" width="140" height="110" rx="8"/>
+  <text class="t" x="266" y="112" text-anchor="middle">Parse</text>
+  <text class="d" x="266" y="134" text-anchor="middle">pymupdf4llm</text>
+  <text class="d" x="266" y="150" text-anchor="middle">ColPali (scanned)</text>
+
+  <rect class="off" x="362" y="80" width="140" height="110" rx="8"/>
+  <text class="t" x="432" y="112" text-anchor="middle">Chunk</text>
+  <text class="d" x="432" y="134" text-anchor="middle">StatisticalChunker</text>
+  <text class="d" x="432" y="150" text-anchor="middle">semantic splits</text>
+
+  <rect class="off" x="528" y="80" width="140" height="110" rx="8"/>
+  <text class="t" x="598" y="112" text-anchor="middle">Enrich</text>
+  <text class="d" x="598" y="134" text-anchor="middle">Claude Haiku context</text>
+  <text class="d" x="598" y="150" text-anchor="middle">Reverse HyDE Qs</text>
+
+  <rect class="off" x="694" y="80" width="140" height="110" rx="8"/>
+  <text class="t" x="764" y="112" text-anchor="middle">Tag</text>
+  <text class="d" x="764" y="134" text-anchor="middle">acl · tenant · version</text>
+  <text class="d" x="764" y="150" text-anchor="middle">updated_at · hash</text>
+
+  <rect class="off" x="860" y="80" width="140" height="110" rx="8"/>
+  <text class="t" x="930" y="112" text-anchor="middle">Embed</text>
+  <text class="d" x="930" y="134" text-anchor="middle">dense: MiniLM/OpenAI</text>
+  <text class="d" x="930" y="150" text-anchor="middle">sparse: SPLADE/BM25</text>
+
+  <rect class="db" x="1026" y="80" width="140" height="110" rx="8"/>
+  <text class="t" x="1096" y="112" text-anchor="middle">Qdrant "kb"</text>
+  <text class="d" x="1096" y="134" text-anchor="middle">dense + sparse + HyDE</text>
+  <text class="d" x="1096" y="150" text-anchor="middle">vectors</text>
+  <text class="d" x="1096" y="166" text-anchor="middle">+ metadata payload</text>
+
+  <line class="ln" x1="170" y1="135" x2="194" y2="135" marker-end="url(#arrow)"/>
+  <line class="ln" x1="336" y1="135" x2="360" y2="135" marker-end="url(#arrow)"/>
+  <line class="ln" x1="502" y1="135" x2="526" y2="135" marker-end="url(#arrow)"/>
+  <line class="ln" x1="668" y1="135" x2="692" y2="135" marker-end="url(#arrow)"/>
+  <line class="ln" x1="834" y1="135" x2="858" y2="135" marker-end="url(#arrow)"/>
+  <line class="ln" x1="1000" y1="135" x2="1024" y2="135" marker-end="url(#arrow)"/>
+
+  <!-- Qdrant feeds Retrieve -->
+  <path class="ln" d="M1096,190 V245 H266 V316" marker-end="url(#arrow)"/>
+  <text class="lbl" x="680" y="239" text-anchor="middle">query-time search (filtered by acl, tenant, latest version)</text>
+
+  <!-- ONLINE -->
+  <text class="band" x="30" y="280">ONLINE · PER REQUEST</text>
+
+  <rect x="184" y="290" width="664" height="172" rx="10" fill="none" stroke="#2b5fd9" stroke-width="1.2" stroke-dasharray="6 4"/>
+  <text x="836" y="306" text-anchor="end" font-size="11" font-weight="700" fill="#2b5fd9">context_engine.build_context()</text>
+
+  <rect class="on" x="30" y="318" width="140" height="112" rx="8"/>
+  <text class="t" x="100" y="352" text-anchor="middle">User query</text>
+  <text class="d" x="100" y="374" text-anchor="middle">+ user identity</text>
+  <text class="d" x="100" y="390" text-anchor="middle">(for ACL filtering)</text>
+
+  <rect class="on" x="196" y="318" width="140" height="112" rx="8"/>
+  <text class="t" x="266" y="346" text-anchor="middle">1 · Retrieve</text>
+  <text class="d" x="266" y="368" text-anchor="middle">hybrid + RRF fusion</text>
+  <text class="d" x="266" y="384" text-anchor="middle">filtered in Qdrant</text>
+  <text class="d" x="266" y="400" text-anchor="middle">~40 candidates</text>
+
+  <rect class="on" x="362" y="318" width="140" height="112" rx="8"/>
+  <text class="t" x="432" y="346" text-anchor="middle">2 · Filter</text>
+  <text class="d" x="432" y="368" text-anchor="middle">dedup (hash, cosine)</text>
+  <text class="d" x="432" y="384" text-anchor="middle">per-document cap</text>
+  <text class="d" x="432" y="400" text-anchor="middle">injection screen</text>
+
+  <rect class="on" x="528" y="318" width="140" height="112" rx="8"/>
+  <text class="t" x="598" y="346" text-anchor="middle">3 · Rank</text>
+  <text class="d" x="598" y="368" text-anchor="middle">cross-encoder</text>
+  <text class="d" x="598" y="384" text-anchor="middle">score ≥ threshold</text>
+  <text class="d" x="598" y="400" text-anchor="middle">keep ≤ 8</text>
+
+  <rect class="on" x="694" y="318" width="140" height="112" rx="8"/>
+  <text class="t" x="764" y="346" text-anchor="middle">4 · Compress</text>
+  <text class="d" x="764" y="368" text-anchor="middle">sentence pruning</text>
+  <text class="d" x="764" y="384" text-anchor="middle">parent expansion</text>
+  <text class="d" x="764" y="400" text-anchor="middle">token budget</text>
+
+  <text class="lbl" x="196" y="452">output: ContextPack = evidence {id, source, updated_at, text, score} + token count + drop trace</text>
+
+  <rect class="gr" x="860" y="318" width="140" height="112" rx="8"/>
+  <text class="t" x="930" y="346" text-anchor="middle">5 · Ground</text>
+  <text class="d" x="930" y="368" text-anchor="middle">Claude Sonnet</text>
+  <text class="d" x="930" y="384" text-anchor="middle">cite every claim</text>
+  <text class="d" x="930" y="400" text-anchor="middle">abstain if weak</text>
+
+  <rect class="on" x="1026" y="318" width="140" height="112" rx="8"/>
+  <text class="t" x="1096" y="352" text-anchor="middle">Answer</text>
+  <text class="d" x="1096" y="374" text-anchor="middle">+ citations</text>
+  <text class="d" x="1096" y="390" text-anchor="middle">(cited IDs verified)</text>
+
+  <line class="ln" x1="170" y1="374" x2="194" y2="374" marker-end="url(#arrow)"/>
+  <line class="ln" x1="336" y1="374" x2="360" y2="374" marker-end="url(#arrow)"/>
+  <line class="ln" x1="502" y1="374" x2="526" y2="374" marker-end="url(#arrow)"/>
+  <line class="ln" x1="668" y1="374" x2="692" y2="374" marker-end="url(#arrow)"/>
+  <line class="ln" x1="834" y1="374" x2="858" y2="374" marker-end="url(#arrow)"/>
+  <line class="ln" x1="1000" y1="374" x2="1024" y2="374" marker-end="url(#arrow)"/>
+
+  <!-- MEASURE -->
+  <text class="band" x="30" y="508">MEASURE · FEEDBACK LOOP</text>
+
+  <path class="ln" d="M334,462 V522" marker-end="url(#arrow)"/>
+  <text class="lbl" x="342" y="496">trace + logs</text>
+
+  <rect class="me" x="184" y="524" width="300" height="100" rx="8"/>
+  <text class="t" x="334" y="552" text-anchor="middle">Request logs + eval set</text>
+  <text class="d" x="334" y="574" text-anchor="middle">IDs kept / dropped · tokens · latency per stage</text>
+  <text class="d" x="334" y="590" text-anchor="middle">50–200 real questions with known docs</text>
+  <text class="d" x="334" y="606" text-anchor="middle">and reference answers</text>
+
+  <rect class="me" x="514" y="524" width="300" height="100" rx="8"/>
+  <text class="t" x="664" y="552" text-anchor="middle">Metrics</text>
+  <text class="d" x="664" y="574" text-anchor="middle">recall after Rank vs after Compress</text>
+  <text class="d" x="664" y="590" text-anchor="middle">grounded accuracy · correct abstain</text>
+  <text class="d" x="664" y="606" text-anchor="middle">P95 latency · cost per successful request</text>
+
+  <rect class="me" x="844" y="524" width="322" height="100" rx="8"/>
+  <text class="t" x="1005" y="552" text-anchor="middle">Tune</text>
+  <text class="d" x="1005" y="574" text-anchor="middle">rank threshold · token budget</text>
+  <text class="d" x="1005" y="590" text-anchor="middle">fusion weights · chunking</text>
+
+  <line class="ln" x1="484" y1="574" x2="512" y2="574" marker-end="url(#arrow)"/>
+  <line class="ln" x1="814" y1="574" x2="842" y2="574" marker-end="url(#arrow)"/>
+
+  <path d="M1005,524 V488 H800 V464" fill="none" stroke="#059669" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#arrow)"/>
+  <text class="lbl" x="1013" y="506">feedback</text>
+
+  <text x="600" y="656" text-anchor="middle" font-size="11" fill="#6b7280">Grey: offline steps from notebooks 02–08 · Blue: online pipeline (Retrieve and Rank exist in 06–07; Filter, Compress, Ground to build) · Green: to build</text>
+</svg>

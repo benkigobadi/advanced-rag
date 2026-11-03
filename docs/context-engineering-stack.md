@@ -8,6 +8,8 @@ Every stage below decides what reaches the model, and most stages already exist 
 as notebooks. This doc maps each stage to the code we have, picks one default per
 stage, and lists what still needs to be built.
 
+![Context engineering architecture](context-engineering-architecture.svg)
+
 ---
 
 ## 1. Stack at a glance
